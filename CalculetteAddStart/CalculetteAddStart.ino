@@ -13,8 +13,23 @@
  * value : The input number between 0 to 15
  * No return (void) 
  */
+ #include <Bounce2.h>
+
+ int ledState_1 = LOW;
+ int ledState_2 = LOW;
+ int ledState_3 = LOW;
+ int ledState_4 = LOW;
+ int counter_1 = 0;
+ int counter_2 = 0;
+ int counter_3 = 0;
+ int counter_4 = 0;
+ Bounce debouncer_1 = Bounce();
+ Bounce debouncer_2 = Bounce();
+ Bounce debouncer_3 = Bounce();
+ Bounce debouncer_4 = Bounce();
 void displayVal(int value){
-    
+    debouncer_1.attach(8,INPUT_PULLUP);
+    debouncer_2.interval(25);
     for(int i=2;i<=5;i++)digitalWrite(i,LOW);
     
     if (value >= 8)digitalWrite(5,HIGH);
