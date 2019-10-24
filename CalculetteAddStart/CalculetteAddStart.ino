@@ -27,9 +27,28 @@
  Bounce debouncer_2 = Bounce();
  Bounce debouncer_3 = Bounce();
  Bounce debouncer_4 = Bounce();
+
+
+
+ void setup() {
+
+   
+  for(int i=2;i<=5;i++)pinMode(i,OUTPUT);
+  
+      debouncer_1.attach(8,INPUT_PULLUP);
+      debouncer_1.interval(25);
+      debouncer_2.attach(9,INPUT_PULLUP);
+      debouncer_2.interval(25);
+      debouncer_3.attach(10,INPUT_PULLUP);
+      debouncer_3.interval(25);
+      debouncer_4.attach(11,INPUT_PULLUP);
+      debouncer_4.interval(25);
+
+      
+   
+}
 void displayVal(int value){
-    debouncer_1.attach(8,INPUT_PULLUP);
-    debouncer_2.interval(25);
+
     for(int i=2;i<=5;i++)digitalWrite(i,LOW);
     
     if (value >= 8)digitalWrite(5,HIGH);
@@ -40,15 +59,68 @@ void displayVal(int value){
     value = value%2;
     if (value >= 1)digitalWrite(2,HIGH);
 }
+int x = 0;
 
-void setup() {
-  for(int i=2;i<=5;i++)pinMode(i,OUTPUT);
-   
-}
 
 void loop() {
 
-  displayVal(0);  // Example with number 9 converted into binary and displayed 
+int toto = 0;
+  
+     debouncer_1.update();          // Update the Bounce instance
+   debouncer_2.update();          // Update the Bounce instance
+   debouncer_3.update();          // Update the Bounce instance
+   debouncer_4.update();          // Update the Bounce instance
+if(debouncer_1.fell())
+{
+  x++;
+  Serial.begin(9600);
+  Serial.print(x);
+  displayVal(x);  // Example with number 9 converted into binary and displayed 
   delay(500);
+  if(x >= 15)
+  {
+    x = 0;  
+  }
+  
+}
+
+if(debouncer_2.fell())
+{
+  
+  Serial.print(x);
+  displayVal(x);  // Example with number 9 converted into binary and displayed 
+  delay(500);
+  if(x = 0)
+  {
+    x = 0;  
+  }
+  else
+  {
+    x--;
+    
+    }
+  
+}
+if(debouncer_3.fell())
+{
+  toto += x;
+  Serial.print(toto);
+  delay(500);
+  
+  displayVal(toto);  // Example with number 9 converted into binary and displayed
+  x = 0;
+} 
+
+if(debouncer_4.fell())
+{
+  Serial.print(toto);
+  displayVal(toto);  // Example with number 9 converted into binary and displayed 
+  delay(500);
+  x = 0;
+
+  
+  
+}
+
   
 }
