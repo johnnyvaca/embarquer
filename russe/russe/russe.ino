@@ -41,7 +41,7 @@ Use Freeduino-RichBoard made by www.EmbeddedMarket.com
  * http://www.arduino.cc/en/Tutorial/Melody
  */
   
-int speakerPin = 9;
+int speakerPin = 6;
 
 int length = 149; // the number of notes
 
