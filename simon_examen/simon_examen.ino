@@ -20,6 +20,17 @@ Bounce cmdJ = Bounce(); // Instantiate a Bounce object
 Bounce cmdR = Bounce(); // Instantiate a Bounce object
 Bounce cmdV = Bounce(); // Instantiate a Bounce object
 
+int haribo
+
+
+int  noteB  = 329;
+int  noteJ  = 261;
+int  noteR  = 220;
+int  noteV  = 164;
+int  erreur = 65;
+int Note[5]= {noteB,noteJ,noteR,noteV};
+
+
 
 void setup() {
 
@@ -51,11 +62,7 @@ void setup() {
   Serial.begin(9600);         // Set communication rate to 9600 bauds  
 
 
-  
-   if (cmdB.fell()) {      // Call code if button transitions from HIGH to LOW
 
-     
-   }
 
 
 }
@@ -78,11 +85,12 @@ void loop() {
 
            ledEtat_1 = !ledEtat_1;    // Toggle LED state
      digitalWrite(ledB,ledEtat_1);  // apply new LED state
+   /////////////////////
    
-  tone(buzzeur, 1000); // Send 1KHz sound signal...
+  tone(buzzeur, noteB); // Send 1KHz sound signal...
   delay(1000);        // ...for 1 sec
   noTone(buzzeur);     // Stop sound...
-
+///////////////
      ledEtat_1 = !ledEtat_1;    // Toggle LED state
      digitalWrite(ledB,ledEtat_1);
     }
