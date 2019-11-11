@@ -1,4 +1,8 @@
 #include <Bounce2.h>
+#include <stdlib.h>
+
+
+
 
 int ledEtat_1 = LOW;
 int ledEtat_2 = LOW;
@@ -20,18 +24,19 @@ Bounce cmdJ = Bounce(); // Instantiate a Bounce object
 Bounce cmdR = Bounce(); // Instantiate a Bounce object
 Bounce cmdV = Bounce(); // Instantiate a Bounce object
 
-int haribo
 
-
+int haribo[] = {164,0,164, 70,185,164, 0 ,164, 70,164, 0 ,164, 70,185,164, 0 ,164, 70};
+int pause[] =  {900,20000,900,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200};
 int  noteB  = 329;
 int  noteJ  = 261;
 int  noteR  = 220;
 int  noteV  = 164;
 int  erreur = 65;
-int Note[5]= {noteB,noteJ,noteR,noteV};
 
+const int notesClairLune[] = {262, 262, 262, 294, 330, 294, 262, 330, 294, 294, 262 } ;
+const int dureeClairLune[] = {400, 400, 400, 400, 800, 800, 400, 400, 400, 400, 1200 };
 
-
+// this is america childish gambino
 void setup() {
 
   pinMode(buzzeur, OUTPUT);
@@ -84,12 +89,21 @@ void loop() {
     if(compteur_1 == 0){
 
            ledEtat_1 = !ledEtat_1;    // Toggle LED state
-     digitalWrite(ledB,ledEtat_1);  // apply new LED state
+    // digitalWrite(ledB,ledEtat_1);  // apply new LED state
    /////////////////////
-   
-  tone(buzzeur, noteB); // Send 1KHz sound signal...
-  delay(1000);        // ...for 1 sec
-  noTone(buzzeur);     // Stop sound...
+
+   for(int i = 0; i < 11;i++){
+
+      int randomValue = rand() % 4 +2;
+      tone(buzzeur, notesClairLune[i]); // Send 1KHz sound signal...
+      digitalWrite(randomValue,HIGH);  // apply new LED state
+      delay(dureeClairLune[i]);        // ...for 1 sec
+      digitalWrite(randomValue,LOW);
+    
+    
+     }
+ 
+   noTone(buzzeur);     // Stop sound...
 ///////////////
      ledEtat_1 = !ledEtat_1;    // Toggle LED state
      digitalWrite(ledB,ledEtat_1);
@@ -97,17 +111,28 @@ void loop() {
     else{
      ledEtat_1 = !ledEtat_1;    // Toggle LED state
      digitalWrite(ledB,ledEtat_1);  // apply new LED state
+
+     delay(3000);
+     ledEtat_1 = !ledEtat_1;    // Toggle LED state
+     digitalWrite(ledB,ledEtat_1);
+     }  
+     
+     
      compteur_1++;
      
      //Transmission for button 1
      Serial.print("Le bouton 1 a été appuyé ");
      Serial.print(compteur_1,DEC);
      Serial.println(" fois");
-     delay(3000);
-     ledEtat_1 = !ledEtat_1;    // Toggle LED state
-     digitalWrite(ledB,ledEtat_1);
-     }
    }
+
+
+
+
+
+
+
+   
       if (cmdJ.fell()) {      // Call code if button transitions from HIGH to LOW
    ledEtat_2 = !ledEtat_2;    // Toggle LED state
      digitalWrite(ledJ,ledEtat_2);  // apply new LED state
