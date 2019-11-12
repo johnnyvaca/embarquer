@@ -2,43 +2,42 @@
 #include <stdlib.h>
 
 
+
+const int MAX = 31;
+
+
 int ledEtatB = LOW;
 int ledEtatJ = LOW;
 int ledEtatR = LOW;
 int ledEtatV = LOW;
 int compteur_1 = 0;
-int compteur_2 = 0;
-int compteur_3 = 0;
-int compteur_4 = 0;
 int ledB = 2;
 int ledJ = 3;
 int ledR = 4;
 int ledV = 5;
-
-
-//21 notes
+int ledEtat = -1;
+int led = -1;
+int note = -1;
+int noteB = 329;
+int noteJ = 261;
+int noteR = 220;
+int noteV = 164;
+int erreur = 65;
 int buzzeur = 6;
+int memorySimon[MAX];
+int memoryJoueur[MAX];
+int clique = -1;
+int compteurJoueur = 0;
+
+int tourSimon = 1;
+
+
 Bounce cmdB = Bounce(); // Instantiate a Bounce object
 Bounce cmdJ = Bounce(); // Instantiate a Bounce object
 Bounce cmdR = Bounce(); // Instantiate a Bounce object
 Bounce cmdV = Bounce(); // Instantiate a Bounce object
 
 
-// int haribo[] = {164, 0, 164, 70, 185, 164, 0, 164, 70, 164, 0, 164, 70, 185, 164, 0, 164, 70};
-// int pause[] = {900, 20000, 900, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200};
-int noteB = 329;
-int noteJ = 261;
-int noteR = 220;
-int noteV = 164;
-int erreur = 65;
-
-const int noteSimon[] = {noteB,noteJ,noteR,noteV};
-
-
-int memorySimon[32];
-int memoryJoueur[32];
-
-int compteurJoueur = 0;
 
 void jungle()
 {
@@ -47,46 +46,39 @@ void jungle()
   notesClairLune[] = {262, 262, 262, 294, 330, 294, 262, 330, 294, 294, 262};
   const int
   dureeClairLune[] = {400, 400, 400, 400, 800, 800, 400, 400, 400, 400, 1200};
-  for (int i = 0;
-  i < 11;
+  for (int i = 0;i < 11;
   i++
-)
+  )
   {
 
-    int
-    randomValue = rand() % 4 + 2;
+    int randomValue = rand() % 4 + 2;
 
-    tone(buzzeur, notesClairLune[i]); // Send 1KHz sound signal...
-    digitalWrite(randomValue, HIGH);  // apply new LED state
-    delay(dureeClairLune[i]);        // ...for 1 sec
+    tone(buzzeur, notesClairLune[i]); 
+    digitalWrite(randomValue, HIGH);  
+    delay(dureeClairLune[i]);    
     digitalWrite(randomValue, LOW);
 
 
   }
 
-  noTone(buzzeur);     // Stop sound...
-
+  noTone(buzzeur);      
 
 }
 
 void eteindreTout()
 {
 
-  digitalWrite(2, LOW);
-  digitalWrite(3, LOW);
-  digitalWrite(4, LOW);
-  digitalWrite(5, LOW);
-
+  digitalWrite(ledEtatB, LOW);
+  digitalWrite(ledEtatJ, LOW);
+  digitalWrite(ledEtatR, LOW);
+  digitalWrite(ledEtatV, LOW);
 
 }
 
 
-void simon()
+void simonEnregistre()
 {
-  for (int i = 0;
-  i < 32;
-  i++
-)
+  for (int i = 0;i < MAX;i++)
   {
 
     int randomSimon = rand() % 4 + 2;
@@ -94,7 +86,7 @@ void simon()
     memorySimon[i] = randomSimon;
 
     Serial.print("touche ");
-    Serial.print(i, DEC);
+    Serial.print(i+1, DEC);
     Serial.print(" = ");
     Serial.print(memorySimon[i] - 1);
     Serial.println(" ");
@@ -102,22 +94,42 @@ void simon()
   }
 }
 
+void simonJoue(int niveau){
+  
+  for(int i = 0; i < niveau; i++)
+  {
+
+      digitalWrite(memorySimon[i], HIGH); // apply LED state
+      Serial.print("touche ");
+      Serial.print(i+1, DEC);
+      Serial.print(" = ");
+      Serial.print(memorySimon[i] - 1);
+      Serial.println(" ");
+      delay(500);
+      digitalWrite(memorySimon[i], LOW); // apply LED state
+      
+  
+  }
+  
+ tourSimon = 0;
+
+}
 
 void setup()
 {
 
   pinMode(buzzeur, OUTPUT);
-  cmdB.attach(A2, INPUT_PULLUP); // attach the debouncer to a pin with INPUT_PULLUP mode
-  cmdB.interval(25); // Use a debounce interval of 25 milliseconds
+  cmdB.attach(A2, INPUT_PULLUP);
+  cmdB.interval(25);
 
-  cmdJ.attach(A3, INPUT_PULLUP); // attach the debouncer to a pin with INPUT_PULLUP mode
-  cmdJ.interval(25); // Use a debounce interval of 25 milliseconds
+  cmdJ.attach(A3, INPUT_PULLUP);
+  cmdJ.interval(25);
 
-  cmdR.attach(A4, INPUT_PULLUP); // attach the debouncer to a pin with INPUT_PULLUP mode
-  cmdR.interval(25); // Use a debounce interval of 25 milliseconds
+  cmdR.attach(A4, INPUT_PULLUP);
+  cmdR.interval(25); 
 
-  cmdV.attach(A5, INPUT_PULLUP); // attach the debouncer to a pin with INPUT_PULLUP mode
-  cmdV.interval(25); // Use a debounce interval of 25 milliseconds
+  cmdV.attach(A5, INPUT_PULLUP);
+  cmdV.interval(25); 
 
 
   pinMode(ledB, OUTPUT); // Led Bleu
@@ -129,175 +141,138 @@ void setup()
   digitalWrite(ledR, ledEtatR); // apply LED state
   digitalWrite(ledV, ledEtatV); // apply LED state
 
-  Serial.begin(9600);         // Set communication rate to 9600 bauds
+  Serial.begin(9600);    
 
 }
 
-
 void loop()
 {
+cmdB.update();         
+  cmdJ.update();        
+  cmdR.update();       
+  cmdV.update();      
 
-  // put your main code here, to run repeatedly:
+/*
 
-  cmdB.update();          // Update the Bounce instance
-  cmdJ.update();          // Update the Bounce instance
-  cmdR.update();          // Update the Bounce instance
-  cmdV.update();          // Update the Bounce instance
+if(tourSimon == 1){
+    for(int x = 1; x < MAX; x++)
+    {
+        simonJoue(x);
+    }
+}
+*/
+           
 
-
-/// 1 BLEU ////////////////
-  if (cmdB.fell()) {      // Call code if button transitions from HIGH to LOW
-
-////// JUNGLE ////////////////////
-    if (compteur_1 == 0) {
-
+  if (cmdB.fell()) {   
+  if (compteur_1 == 0) {
+   
+      simonEnregistre();
       jungle();
-      simon();
+     
       compteur_1++;
-    } else {
+    }else    
+    {
+      clique = 2;
       ledEtatB = !ledEtatB;
-      digitalWrite(ledB, ledEtatB);
-      if (2 == memorySimon[compteurJoueur]) {
+      ledEtat = ledEtatB;
+      led = ledB;
+      note = noteB;  
+    }
+  
+  }
 
 
-        tone(buzzeur, noteB);
-        Serial.print("VRAI touche : ");
-        Serial.print(compteurJoueur, DEC);
-        Serial.print(" moi = 1");
-        Serial.print("  ||   Simon = ");
-        Serial.print(memorySimon[compteurJoueur] - 1, DEC);
-        Serial.println(" fois");
+if( compteur_1 == 1){
 
 
-      } else {
-        Serial.print("FAUX touche : ");
-        Serial.print(compteurJoueur, DEC);
-        Serial.print(" moi = 1");
-        Serial.print("  ||   Simon = ");
-        Serial.print(memorySimon[compteurJoueur] - 1, DEC);
-        Serial.println(" fois");
-        tone(buzzeur, erreur);
-
+      
+      if (cmdJ.fell()) {
+        clique = 3;
+          ledEtatJ = !ledEtatJ;
+          ledEtat = ledEtatJ;
+          led = ledJ;
+          note = noteJ;
       }
-      delay(500);
-      noTone(buzzeur);
+    
+    
+      if (cmdR.fell()) {
+        clique = 4;
+          ledEtatR = !ledEtatR;
+          ledEtat = ledEtatR;
+          led = ledR;
+          note = noteR;
+      }
+    
+    
+      if (cmdV.fell()) {
+        clique = 5;
+        ledEtatV = !ledEtatV;
+        ledEtat = ledEtatV;
+        led = ledV;
+        note = noteV;
+      }
 
-      ledEtatB = !ledEtatB;
-      digitalWrite(ledB, ledEtatB);
-      compteurJoueur++;
 
 
-    }
+  }
+  
 
+  if(compteurJoueur+1 <= MAX)
+  {
+
+
+  
+  
+      if(clique == 2 || clique == 3 || clique == 4 || clique == 5){
+    
+    
+            digitalWrite(led, ledEtat);   
+            if (clique == memorySimon[compteurJoueur]) {
+            
+            
+            tone(buzzeur, note);
+            Serial.print("VRAI touche : ");
+            
+            } 
+            
+            else {
+            
+            tone(buzzeur, erreur);
+            Serial.print("FAUX touche : ");
+            }
+            
+            
+            Serial.print(compteurJoueur+1, DEC);
+            Serial.print("          moi = ");
+            Serial.print(clique-1, DEC);
+            Serial.print("  ||   Simon = ");
+            Serial.print(memorySimon[compteurJoueur] - 1, DEC);
+            Serial.println(" fois");
+            
+            delay(250);
+            noTone(buzzeur);
+            
+    
+    
+           ledEtat = !ledEtat;
+           
+          ledEtatB = ledEtat;
+          ledEtatJ = ledEtat;
+          ledEtatR = ledEtat;
+          ledEtatV = ledEtat; 
+          digitalWrite(led, ledEtat); 
+            compteurJoueur++;
+            clique = -1;
+            led = -1;
+            note = -1;
+
+    
+        }  
+  
+  
   }
 
 
-  if (cmdJ.fell()) {
-    ledEtatJ = !ledEtatJ;
-    digitalWrite(ledJ, ledEtatJ);
-
-
-    //Transmission for button 2
-
-    if (3 == memorySimon[compteurJoueur]) {
-
-
-      Serial.print("VRAI touche : ");
-      Serial.print(compteurJoueur, DEC);
-      Serial.print(" moi = 2");
-      Serial.print("  ||   Simon = ");
-      Serial.print(memorySimon[compteurJoueur] - 1, DEC);
-      Serial.println(" fois");
-      tone(buzzeur, noteJ);
-
-
-    } else {
-      Serial.print("FAUX touche : ");
-      Serial.print(compteurJoueur, DEC);
-      Serial.print(" moi = 2");
-      Serial.print("  ||   Simon = ");
-      Serial.print(memorySimon[compteurJoueur] - 1, DEC);
-      Serial.println(" fois");
-      ;
-      tone(buzzeur, erreur);
-
-    }
-    delay(500);
-    noTone(buzzeur);
-
-    ledEtatJ = !ledEtatJ;
-    digitalWrite(ledJ, ledEtatJ);
-    compteurJoueur++;
-
-  }
-
-
-  if (cmdR.fell()) {
-    ledEtatR = !ledEtatR;
-    digitalWrite(ledR, ledEtatR);
-    if (4 == memorySimon[compteurJoueur]) {
-
-
-      Serial.print("VRAI touche : ");
-      Serial.print(compteurJoueur, DEC);
-      Serial.print(" moi = 3");
-      Serial.print("  ||   Simon = ");
-      Serial.print(memorySimon[compteurJoueur] - 1, DEC);
-      Serial.println(" fois");
-      tone(buzzeur, noteR);
-
-
-    } else {
-      Serial.print("FAUX touche : ");
-      Serial.print(compteurJoueur, DEC);
-      Serial.print(" moi = 3");
-      Serial.print("  ||   Simon = ");
-      Serial.print(memorySimon[compteurJoueur] - 1, DEC);
-      Serial.println(" fois");
-      tone(buzzeur, erreur);
-
-    }
-    delay(500);
-    noTone(buzzeur);
-    ledEtatR = !ledEtatR;
-    digitalWrite(ledR, ledEtatR);
-    compteurJoueur++;
-
-  }
-
-
-  if (cmdV.fell()) {
-    ledEtatV = !ledEtatV;
-    digitalWrite(ledV, ledEtatV);
-    if (5 == memorySimon[compteurJoueur]) {
-
-
-      Serial.print("VRAI touche : ");
-      Serial.print(compteurJoueur, DEC);
-      Serial.print(" moi = 4");
-      Serial.print("  ||   Simon = ");
-      Serial.print(memorySimon[compteurJoueur] - 1, DEC);
-      Serial.println(" fois");
-      tone(buzzeur, noteV);
-
-
-    } else {
-      Serial.print("FAUX touche : ");
-      Serial.print(compteurJoueur, DEC);
-      Serial.print(" moi = 4");
-      Serial.print("  ||   Simon = ");
-      Serial.print(memorySimon[compteurJoueur] - 1, DEC);
-      Serial.println(" fois");
-      tone(buzzeur, erreur);
-
-    }
-    delay(500);
-    noTone(buzzeur);
-
-    ledEtatV = !ledEtatV;
-    digitalWrite(ledV, ledEtatV);
-    compteurJoueur++;
-  }
-
+  
 
 }
