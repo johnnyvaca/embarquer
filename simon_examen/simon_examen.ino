@@ -96,23 +96,6 @@ void simonEnregistre()
 
 void simonJoue(int niveau){
   
-  for(int i = 0; i < niveau; i++)
-  {
-
-      digitalWrite(memorySimon[i], HIGH); // apply LED state
-      Serial.print("touche ");
-      Serial.print(i+1, DEC);
-      Serial.print(" = ");
-      Serial.print(memorySimon[i] - 1);
-      Serial.println(" ");
-      delay(500);
-      digitalWrite(memorySimon[i], LOW); // apply LED state
-      
-  
-  }
-  
- tourSimon = 0;
-
 }
 
 void setup()
@@ -144,7 +127,7 @@ void setup()
   Serial.begin(9600);    
 
 }
-
+int maximum = 1;
 void loop()
 {
 cmdB.update();         
@@ -152,38 +135,50 @@ cmdB.update();
   cmdR.update();       
   cmdV.update();      
 
-/*
 
-if(tourSimon == 1){
-    for(int x = 1; x < MAX; x++)
-    {
-        simonJoue(x);
-    }
-}
-*/
+
+
            
 
   if (cmdB.fell()) {   
   if (compteur_1 == 0) {
    
       simonEnregistre();
-      jungle();
+  //    jungle();
      
       compteur_1++;
     }else    
     {
-      clique = 2;
-      ledEtatB = !ledEtatB;
-      ledEtat = ledEtatB;
-      led = ledB;
-      note = noteB;  
+/*
+    if(tourSimon == 1){
+    
+          for(int i = 0; i < maximum; i++)
+          {
+          
+                digitalWrite(memorySimon[i], HIGH); // apply LED state
+                Serial.print("touche ");
+                Serial.print(i+1, DEC);
+                Serial.print(" = ");
+                Serial.print(memorySimon[i] - 1);
+                Serial.println(" ");
+                delay(250);
+                digitalWrite(memorySimon[i], LOW); // apply LED state
+       
+          }
+    }
+    */
+
+        clique = 2;
+        ledEtatB = !ledEtatB;
+        ledEtat = ledEtatB;
+        led = ledB;
+        note = noteB;  
     }
   
   }
 
 
 if( compteur_1 == 1){
-
 
       
       if (cmdJ.fell()) {
@@ -220,9 +215,6 @@ if( compteur_1 == 1){
   if(compteurJoueur+1 <= MAX)
   {
 
-
-  
-  
       if(clique == 2 || clique == 3 || clique == 4 || clique == 5){
     
     
@@ -265,10 +257,9 @@ if( compteur_1 == 1){
             clique = -1;
             led = -1;
             note = -1;
-
+            maximum++;
     
         }  
-  
   
   }
 
