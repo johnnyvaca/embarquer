@@ -28,6 +28,8 @@ int memorySimon[MAX];
 int memoryJoueur[MAX];
 int clique = 1;
 int compteurJoueur = 0;
+int cliqueSimon = 0;
+int cliqueJoueur = 0;
 
 int tourSimon = 1;
 
