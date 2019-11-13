@@ -144,17 +144,14 @@ cmdB.update();
   if (compteur_1 == 0) {
    
       simonEnregistre();
-  //    jungle();
-     
-      compteur_1++;
-    }else    
-    {
-/*
-    if(tourSimon == 1){
-    
-          for(int i = 0; i < maximum; i++)
+      jungle();
+
+     delay(1000);
+                         for(int i = 0; i < 4; i++)
           {
-          
+                
+                   
+                tone(buzzeur, erreur);
                 digitalWrite(memorySimon[i], HIGH); // apply LED state
                 Serial.print("touche ");
                 Serial.print(i+1, DEC);
@@ -163,10 +160,17 @@ cmdB.update();
                 Serial.println(" ");
                 delay(250);
                 digitalWrite(memorySimon[i], LOW); // apply LED state
+                noTone(buzzeur);
        
           }
-    }
-    */
+      compteur_1++;
+    }else    
+    {
+
+
+
+  
+    
 
         clique = 2;
         ledEtatB = !ledEtatB;
@@ -215,7 +219,11 @@ if( compteur_1 == 1){
   if(compteurJoueur+1 <= MAX)
   {
 
-      if(clique == 2 || clique == 3 || clique == 4 || clique == 5){
+      if(clique == 2 || clique == 3 || clique == 4 || clique == 5 ){
+
+
+
+
     
     
             digitalWrite(led, ledEtat);   
@@ -259,11 +267,27 @@ if( compteur_1 == 1){
             note = -1;
             maximum++;
     
-        }  
+        }
+
   
   }
 
 
-  
-
 }
+
+
+/*          for(int i = 0; i < maximum; i++)
+          {
+          
+                digitalWrite(memorySimon[i], HIGH); // apply LED state
+                Serial.print("touche ");
+                Serial.print(i+1, DEC);
+                Serial.print(" = ");
+                Serial.print(memorySimon[i] - 1);
+                Serial.println(" ");
+                delay(250);
+                digitalWrite(memorySimon[i], LOW); // apply LED state
+       
+          }
+
+          */
