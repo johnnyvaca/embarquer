@@ -29,7 +29,7 @@ int memoryJoueur[MAX];
 int clique = -1;
 int compteurJoueur = 0;
 
-
+int tourSimon = 1;
 
 
 Bounce cmdB = Bounce(); // Instantiate a Bounce object
@@ -94,30 +94,42 @@ void simonEnregistre()
   }
 }
 
-void simonJoue(int tourSimon){
-     
-
-
-  for(int i = 0; i< tourSimon; i++){
-
-    
-  digitalWrite(memorySimon[i], HIGH);
-  delay(250);
-  digitalWrite(memorySimon[i], LOW);
-
-    
-    
-  }
+void simonJoue(int niveau){
   
 }
 
+void setup()
+{
 
+  pinMode(buzzeur, OUTPUT);
+  cmdB.attach(A2, INPUT_PULLUP);
+  cmdB.interval(25);
+
+  cmdJ.attach(A3, INPUT_PULLUP);
+  cmdJ.interval(25);
+
+  cmdR.attach(A4, INPUT_PULLUP);
+  cmdR.interval(25); 
+
+  cmdV.attach(A5, INPUT_PULLUP);
+  cmdV.interval(25); 
+
+
+  pinMode(ledB, OUTPUT); // Led Bleu
+  pinMode(ledJ, OUTPUT); // Led Jaune
+  pinMode(ledR, OUTPUT); // Led Rouge
+  pinMode(ledV, OUTPUT); // Led Vert
+  digitalWrite(ledB, ledEtatB); // apply LED state
+  digitalWrite(ledJ, ledEtatJ); // apply LED state
+  digitalWrite(ledR, ledEtatR); // apply LED state
+  digitalWrite(ledV, ledEtatV); // apply LED state
+
+  Serial.begin(9600);    
+
+}
 int maximum = 1;
-
-void joueurJoue(int tourJoueur){
-  
-  
-  
+void loop()
+{
 cmdB.update();         
   cmdJ.update();        
   cmdR.update();       
@@ -200,23 +212,24 @@ if( compteur_1 == 1){
   }
   
 
-  if(compteurJoueur < tourJoueur)
+  if(compteurJoueur+1 <= MAX)
   {
 
-
       if(clique == 2 || clique == 3 || clique == 4 || clique == 5){
+    
+    
             digitalWrite(led, ledEtat);   
             if (clique == memorySimon[compteurJoueur]) {
             
             
-//            tone(buzzeur, note);
+            tone(buzzeur, note);
             Serial.print("VRAI touche : ");
             
             } 
             
             else {
             
-        //    tone(buzzeur, erreur);
+            tone(buzzeur, erreur);
             Serial.print("FAUX touche : ");
             }
             
@@ -229,7 +242,7 @@ if( compteur_1 == 1){
             Serial.println(" fois");
             
             delay(250);
-        //    noTone(buzzeur);
+            noTone(buzzeur);
             
     
     
@@ -246,54 +259,11 @@ if( compteur_1 == 1){
             note = -1;
             maximum++;
     
-
-          
-  }
-
+        }  
   
   }
 
 
-  }
-
-
-  void setup()
-{
-
-  pinMode(buzzeur, OUTPUT);
-  cmdB.attach(A2, INPUT_PULLUP);
-  cmdB.interval(25);
-
-  cmdJ.attach(A3, INPUT_PULLUP);
-  cmdJ.interval(25);
-
-  cmdR.attach(A4, INPUT_PULLUP);
-  cmdR.interval(25); 
-
-  cmdV.attach(A5, INPUT_PULLUP);
-  cmdV.interval(25); 
-
-
-  pinMode(ledB, OUTPUT); // Led Bleu
-  pinMode(ledJ, OUTPUT); // Led Jaune
-  pinMode(ledR, OUTPUT); // Led Rouge
-  pinMode(ledV, OUTPUT); // Led Vert
-  digitalWrite(ledB, ledEtatB); // apply LED state
-  digitalWrite(ledJ, ledEtatJ); // apply LED state
-  digitalWrite(ledR, ledEtatR); // apply LED state
-  digitalWrite(ledV, ledEtatV); // apply LED state
-
-  Serial.begin(9600);    
-
-}
-
-gl3int tour = 0;
   
-void loop()
-{
-  
-  tour++;
-  simonJoue(tour);
-  joueurJoue(tour);
 
 }
