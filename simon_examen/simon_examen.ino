@@ -222,14 +222,14 @@ if( compteur_1 == 1){
             if (clique == memorySimon[compteurJoueur]) {
             
             
-            tone(buzzeur, note);
+        //    tone(buzzeur, note);
             Serial.print("VRAI touche : ");
             
             } 
             
             else {
             
-            tone(buzzeur, erreur);
+        //    tone(buzzeur, erreur);
             Serial.print("FAUX touche : ");
             }
             
@@ -242,7 +242,7 @@ if( compteur_1 == 1){
             Serial.println(" fois");
             
             delay(250);
-            noTone(buzzeur);
+       //     noTone(buzzeur);
             
     
     
