@@ -23,7 +23,7 @@ int noteJ = 261;
 int noteR = 220;
 int noteV = 164;
 int erreur = 65;
-int buzzeur = 0;
+int buzzeur = 6;
 int memorySimon[MAX];
 int memoryJoueur[MAX];
 int clique = 1;
@@ -141,7 +141,7 @@ cmdB.update();
   if (compteur_1 == 0) {
    
       simonEnregistre();
-//      jungle();
+      jungle();
 
      
 
@@ -158,7 +158,7 @@ cmdB.update();
   }
 
 
-    ( compteur_1 == 1){
+    if( compteur_1 == 1){
 
 
       if(clique == 1){
