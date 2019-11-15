@@ -5,6 +5,7 @@ Description : Jeu du Simon - Projet Embarqué - Filère Informatique CPNV
 */
 #include <Bounce2.h>
 #include <stdlib.h>
+#include <time.h>
 
 
 const int MAX = 3;
@@ -49,6 +50,8 @@ void jungle() {
   const int dureeClairLune[] = {400,400,400400,800,800,400,400,400,400,1200};
   
   for (int i = 0; i < 11; i++) {
+    
+    srand(time(NULL));
 
     int randomValue = rand() % 4 + 2;
 
@@ -75,6 +78,7 @@ void eteindreTout() {
 void simonEnregistre() {
   for (int i = 0; i < MAX; i++) {
 
+    srand(time(NULL));
     int randomSimon = rand() % 4 + 2;
 
     memorySimon[i] = randomSimon;
