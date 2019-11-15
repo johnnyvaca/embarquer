@@ -88,10 +88,6 @@ void simonEnregistre() {
   }
 }
 
-void simonJoue(int niveau) {
-
-}
-
 void setup() {
 
   pinMode(buzzeur, OUTPUT);
