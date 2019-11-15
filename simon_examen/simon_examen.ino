@@ -5,7 +5,7 @@ Description : Jeu du Simon - Projet Embarqué - Filère Informatique CPNV
 */
 #include <Bounce2.h>
 
-const int MAX = 5;    // Score MAXIMAL du jeu
+const int MAX = 4;    // Score MAXIMAL du jeu
 
 // notes sonnées à l'allumage des leds correspondantes 
 const int noteB = 329;
@@ -13,6 +13,7 @@ const int noteJ = 261;
 const int noteR = 220;
 const int noteV = 164;
 const int erreur = 65;
+
 
 
 const int buzzeur = 6; // numero du port du buzzzeur
@@ -75,6 +76,34 @@ void jungle() {
 
   noTone(buzzeur);// taire le buzzeur
 
+}
+void sonGagnant(){
+
+
+  const int notesMario[]={2637, 2637, 0, 2637, 0, 2093, 2637, 0, 3136, 0, 0, 0, 1568, 0, 0, 0};
+const int durationMario = 120;
+
+  for (int i = 0; i < 11; i++) {
+
+  int ledAleatoire = random(4)+2;// valeur qui prends 4 valeurs depuis 0+2
+
+    //jeu de lumières qui clignotent
+    if(notesMario[i] == 0){
+       noTone(buzzeur);// taire le buzzeur
+      
+      }else{
+        tone(buzzeur, notesMario[i]);
+        }
+    
+    digitalWrite(ledAleatoire, HIGH);
+    delay(durationMario);
+    digitalWrite(ledAleatoire, LOW);
+
+  }
+
+  noTone(buzzeur);// taire le buzzeur
+
+  
 }
 
 //Stockage de tous les coups de simon durant une partie dans la mémoire de Simon
@@ -215,7 +244,7 @@ void loop() {
           // si le numero du tour est le MAX on gagne
           Serial.print("BRAVO VOUS AVEZ GAGNEE!!!");
           Serial.println(" ");
-          jungle();
+          sonGagnant();
           asm("jmp 0x0000"); // fonction de reset depuis le software
         }
 
@@ -255,7 +284,7 @@ void loop() {
     }
 
   }
-
+//
   if (cliqueJoueur < numTour) {
 
     if (cmdClique == ledB || cmdClique == ledJ || cmdClique == ledR || cmdClique == ledV) {
