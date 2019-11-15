@@ -4,17 +4,14 @@ Date : 15.11.2019
 Description : Jeu du Simon - Projet Embarqué - Filère Informatique CPNV
 */
 #include <Bounce2.h>
-#include <stdlib.h>
-#include <time.h>
 
-
-const int MAX = 3;
+const int MAX = 10;
 const int noteB = 329;
 const int noteJ = 261;
 const int noteR = 220;
 const int noteV = 164;
 const int erreur = 65;
-const int buzzeur = 0;
+const int buzzeur = 6;
 const int ledB = 2;
 const int ledJ = 3;
 const int ledR = 4;
@@ -34,11 +31,10 @@ int memorySimon[MAX];
 int memoryJoueur[MAX];
 int clique = 1;
 int compteurJoueur = 1;
-
 int cliqueJoueur = 0;
 int tour = 0;
 int ii = 0;
-
+      
 Bounce cmdB = Bounce(); // Instantiate a Bounce object
 Bounce cmdJ = Bounce(); // Instantiate a Bounce object
 Bounce cmdR = Bounce(); // Instantiate a Bounce object
@@ -47,13 +43,11 @@ Bounce cmdV = Bounce(); // Instantiate a Bounce object
 void jungle() {
 
   const int notesClairLune[] = {262,262,262,294,330,294,262,330,294,294,262};
-  const int dureeClairLune[] = {400,400,400400,800,800,400,400,400,400,1200};
+  const int dureeClairLune[] = {400,400,400,400,800,800,400,400,400,400,1200};
   
   for (int i = 0; i < 11; i++) {
-    
-    srand(time(NULL));
 
-    int randomValue = rand() % 4 + 2;
+  int randomValue = random(4)+2;
 
     tone(buzzeur, notesClairLune[i]);
     digitalWrite(randomValue, HIGH);
@@ -76,10 +70,9 @@ void eteindreTout() {
 }
 
 void simonEnregistre() {
+ 
   for (int i = 0; i < MAX; i++) {
-
-    srand(time(NULL));
-    int randomSimon = rand() % 4 + 2;
+    int randomSimon = random(4)+2; 
 
     memorySimon[i] = randomSimon;
 
@@ -117,7 +110,7 @@ void setup() {
   digitalWrite(ledV, ledEtatV); // apply LED state
 
   Serial.begin(9600);
-
+randomSeed(analogRead(0));
 }
 
 int acceleration = 1000;
